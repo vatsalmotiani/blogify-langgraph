@@ -7,18 +7,20 @@ Python application that converts YouTube videos into blog posts using LangGraph.
 ## Overview
 
 1. Extract transcripts from YouTube videos
-2. Generate blog posts from video content
-3. Support multiple output languages
-
-Can be used via both a command-line interface and Streamlit
+2. Generate blog post outlines for user review
+3. Allow user approval or feedback for outline modifications
+4. Generate final blog posts based on approved outlines
+5. Support multiple output languages
 
 ## Features
 
 - Extract transcripts from YouTube videos using the YouTube Transcript API
+- Generate blog post outlines with interactive approval/feedback workflow
+- Modify outlines based on user feedback before generating final blog posts
 - Generate blog posts in multiple languages
 - Automatic language detection for video transcripts
 - Markdown-formatted output with proper headings and structure
-- Two interfaces: CLI and Streamlit web UI
+- Streamlit web UI for easy interaction
 
 ## Project Structure
 
@@ -26,7 +28,6 @@ Can be used via both a command-line interface and Streamlit
 blogify-langgraph/
 ├── app/                   # Core application logic
 │   ├── graph.py           # LangGraph workflow definition
-│   ├── main.py            # CLI entry point
 │   ├── prompts.py         # LLM prompt templates
 │   └── services.py        # Business logic
 ├── frontend/              # Streamlit web interface
@@ -39,7 +40,15 @@ blogify-langgraph/
 ### LangGraph Workflow
 
 1. **Extract Transcript Node**: Fetches the transcript from the YouTube video URL
-2. **Generate Blog Post Node**: Converts the transcript into a formatted blog post using OpenAI
+2. **Generate Outline Node**: Creates a blog post outline from the transcript
+3. **Check Approval Node**: Routes based on user approval status
+4. **Generate Blog Post Node**: Converts the approved outline into a formatted blog post using OpenAI
+
+The workflow supports an interactive feedback loop:
+
+- After generating an outline, users can approve it to proceed with blog post generation
+- Users can also reject the outline and provide feedback for modifications
+- The outline is regenerated based on user feedback until approved
 
 The state (`AgentState`) tracks:
 
@@ -47,12 +56,16 @@ The state (`AgentState`) tracks:
 - Extracted transcript
 - Transcript language
 - Target blog language
+- Generated outline
+- User feedback for outline modifications
+- Approval status
 - Generated blog post
 
 ### Services
 
 - **Transcript Extraction**: Uses `youtube-transcript-api` to fetch video transcripts with automatic language detection
-- **Blog Generation**: Uses OpenAI's `gpt-4o-mini` model via LangChain to generate structured blog posts
+- **Outline Generation**: Uses OpenAI's `gpt-4o-mini` model via LangChain to generate structured blog post outlines, with support for incorporating user feedback
+- **Blog Generation**: Uses OpenAI's `gpt-4o-mini` model via LangChain to generate structured blog posts based on approved outlines
 
 ## Setup
 
@@ -88,21 +101,6 @@ OPENAI_API_KEY=your_api_key_here
 
 ## Usage
 
-### Command Line Interface
-
-Run the CLI application:
-
-```bash
-python -m app.main
-```
-
-You will be prompted to:
-
-1. Enter a YouTube video URL
-2. Select the output language (defaults to English)
-
-The generated blog post will be printed to the console.
-
 ### Streamlit Web Interface
 
 Launch the web interface:
@@ -115,9 +113,23 @@ The web interface provides:
 
 - Input field for YouTube URL
 - Language selector dropdown
-- Generate button
+- Generate button to start the blog generation process
+- Outline preview with approve/reject options
+- Feedback input for outline modifications
 - Markdown preview of the generated blog post
 - Download button to save the blog post as a `.md` file
+- Start over button to reset and begin a new generation
+
+#### Workflow
+
+1. Enter a YouTube URL and select your preferred output language
+2. Click "Generate Blog" to extract the transcript and generate an initial outline
+3. Review the generated outline and either:
+   - **Approve**: Click "Approve" to generate the final blog post from the outline
+   - **Reject**: Click "Reject" to provide feedback and modify the outline
+4. If rejecting, enter your feedback (e.g., "Add more details about X", "Focus on Y topic") and click "Modify Outline" to regenerate
+5. Once approved, the final blog post is generated and displayed
+6. Download the blog post as a markdown file or start over to create a new blog post
 
 ## Dependencies
 

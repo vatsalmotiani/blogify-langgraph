@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from youtube_transcript_api import YouTubeTranscriptApi
 from langchain_openai import ChatOpenAI
 
-from .prompts import generate_blog_post_prompt
+from .prompts import generate_blog_post_prompt, generate_outline_prompt
 
 
 load_dotenv()
@@ -90,10 +90,19 @@ def get_transcript_from_youtube(
         return ("", f"Error extracting transcript: {error_message}")
 
 
-def generate_blog_post(transcript: str, blog_language: str) -> str:
+def generate_outline(transcript: str, blog_language: str, feedback: str | None = None) -> str:
+    """Generating blog post outline"""
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7, max_tokens=1500)
+    prompt = generate_outline_prompt(
+        transcript=transcript, blog_language=blog_language, feedback=feedback
+    )
+    return llm.invoke(prompt).content
+
+
+def generate_blog_post(transcript: str, blog_language: str, outline: str) -> str:
     """Generating blog post"""
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.7, max_tokens=2000)
     prompt = generate_blog_post_prompt(
-        transcript=transcript, blog_language=blog_language
+        transcript=transcript, blog_language=blog_language, outline=outline
     )
     return llm.invoke(prompt).content
