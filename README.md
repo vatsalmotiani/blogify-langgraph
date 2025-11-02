@@ -44,6 +44,8 @@ blogify-langgraph/
 3. **Check Approval Node**: Routes based on user approval status
 4. **Generate Blog Post Node**: Converts the approved outline into a formatted blog post using OpenAI
 
+<img width="408" height="703" alt="blogify-mermaid-v1" src="https://github.com/user-attachments/assets/c640be23-4a1a-41de-b6e1-2d837b40bc7c" />
+
 The workflow supports an interactive feedback loop:
 
 - After generating an outline, users can approve it to proceed with blog post generation
