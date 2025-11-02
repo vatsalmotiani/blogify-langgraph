@@ -2,6 +2,8 @@
 
 Python application that converts YouTube videos into blog posts using LangGraph.
 
+<img width="1487" height="766" alt="image" src="https://github.com/user-attachments/assets/b1717592-3212-4189-af66-2fc50f549f1e" />
+
 ## Overview
 
 1. Extract transcripts from YouTube videos
