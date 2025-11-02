@@ -42,7 +42,7 @@ blogify-langgraph/
 1. **Extract Transcript Node**: Fetches the transcript from the YouTube video URL
 2. **Generate Outline Node**: Creates a blog post outline from the transcript
 3. **Check Approval Node**: Routes based on user approval status
-4. **Generate Blog Post Node**: Converts the approved outline into a formatted blog post using OpenAI
+4. **Generate Blog Post Node**: Converts the approved outline into a formatted blog post using Ollama
 
 <img width="408" height="703" alt="blogify-mermaid-v1" src="https://github.com/user-attachments/assets/c640be23-4a1a-41de-b6e1-2d837b40bc7c" />
 
@@ -66,15 +66,15 @@ The state (`AgentState`) tracks:
 ### Services
 
 - **Transcript Extraction**: Uses `youtube-transcript-api` to fetch video transcripts with automatic language detection
-- **Outline Generation**: Uses OpenAI's `gpt-4o-mini` model via LangChain to generate structured blog post outlines, with support for incorporating user feedback
-- **Blog Generation**: Uses OpenAI's `gpt-4o-mini` model via LangChain to generate structured blog posts based on approved outlines
+- **Outline Generation**: Uses Ollama's `llama3` model via LangChain to generate structured blog post outlines, with support for incorporating user feedback
+- **Blog Generation**: Uses Ollama's `llama3` model via LangChain to generate structured blog posts based on approved outlines
 
 ## Setup
 
 ### Prerequisites
 
 - Python 3.12 or higher
-- OpenAI API key
+- Ollama installed and running locally
 
 ### Installation
 
@@ -95,11 +95,15 @@ uv sync
 pip install -r requirements.txt
 ```
 
-3. Create a `.env` file in the root directory:
+3. Install and run Ollama (if not already installed):
 
+```bash
+# Install Ollama from https://ollama.ai/
+# Then pull the llama3 model:
+ollama pull llama3
 ```
-OPENAI_API_KEY=your_api_key_here
-```
+
+4. (Optional) Create a `.env` file in the root directory for any additional environment variables (no API key needed for Ollama):
 
 ## Usage
 
@@ -137,7 +141,7 @@ The web interface provides:
 
 - **langchain**: LLM framework and abstractions
 - **langgraph**: Workflow orchestration for agentic applications
-- **langchain-openai**: OpenAI integration for LangChain
+- **langchain-ollama**: Ollama integration for LangChain
 - **youtube-transcript-api**: YouTube transcript extraction
 - **streamlit**: Web interface framework
 - **python-dotenv**: Environment variable management
