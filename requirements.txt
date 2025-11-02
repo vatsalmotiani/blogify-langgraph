@@ -1,7 +1,6 @@
 langchain
 langgraph
-langchain-openai
-openai
+langchain-ollama
 youtube-transcript-api
 python-dotenv
 streamlit
